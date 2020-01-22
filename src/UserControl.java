@@ -6,15 +6,23 @@ import java.awt.event.MouseEvent;
 
 public class UserControl extends MouseAdapter {
     private Stars s;
+    private KeyControl keyControl;
     @Override
     public void mouseClicked(MouseEvent e) {
         int mx = e.getX();
         int my = e.getY();
-        try {
-            askValues(mx, my);
-        }catch(Exception ex){
-            System.out.println(this.s.getCount());
-            System.out.println(ex.getMessage());
+        Star selected = s.overlap(mx, my);
+        if(selected != null){
+            keyControl.setSelected(selected);
+        }
+        else {
+
+            try {
+                askValues(mx, my);
+            } catch (Exception ex) {
+                System.out.println(this.s.getCount());
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -22,6 +30,10 @@ public class UserControl extends MouseAdapter {
         System.out.println("Stars set!");
         System.out.println(s.getCount());
         this.s = s;
+    }
+
+    public void setKeyControl(KeyControl k){
+        this.keyControl = k;
     }
 
     public boolean askValues(int mx, int my){

@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 class Star {
     private Double x;
@@ -72,9 +75,9 @@ class Star {
 
                 double colVelocity = (star.velocity.getX() * star.getMass()) / (this.getMass() + star.getMass());
                 colVelocity *= -1;
-                System.out.println(star.velocity.getX());
-                System.out.println(star.velocity.getY());
-                System.out.println(colVelocity);
+                //System.out.println(star.velocity.getX());
+                //System.out.println(star.velocity.getY());
+                //System.out.println(colVelocity);
                 star.modVelocity(colVelocity, 0);
                 return true;
             }
@@ -87,6 +90,10 @@ class Star {
 
     public void modVelocity(double x, double y){
         this.velocity.setLocation(this.velocity.getX() + x, this.velocity.getY() + y);
+    }
+
+    public boolean overlap(int x, int y){
+        return x < (getX() + getSize()) && x > (getX() - getSize()) && y < (getY() + getSize()) && y > (getY() - getSize());
     }
 
     public Double getX(){
@@ -111,7 +118,6 @@ public class Stars {
     private Integer numberOfStars;
     private Integer SimWidth;
     private Integer SimHeight;
-    //private LinkedList<Star> starList = new LinkedList<Star>();
     private ArrayList<Star> starList = new ArrayList<>();
 
     public Stars(Integer width, Integer height){
@@ -155,6 +161,10 @@ public class Stars {
 
     public void createCustom(Star star){
         addStar(star);
+    }
+
+    public Star overlap(int x, int y){
+        return this.starList.stream().filter(s->s.overlap(x,y)).findFirst().orElse(null);
     }
 
     public void updateGravity(){

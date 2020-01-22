@@ -37,8 +37,11 @@ public class Frame extends JFrame {
         private MyCanvas(){
             setBackground(Color.BLACK);
             UserControl uc = new UserControl();
+            KeyControl keyControl = new KeyControl();
             uc.setStars(stars);
+            uc.setKeyControl(keyControl);
             addMouseListener(uc);
+            addKeyListener(keyControl);
         }
         public void paint(Graphics g){
 
